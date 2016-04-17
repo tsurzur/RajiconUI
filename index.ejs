@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title>Rajicon UI by Raspberry Pi</title>
+
+<!-- jQuery -->
+<style>body { background:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }</style>
+<link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.css" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/css/lightness/jquery-ui-1.10.2.custom.min.css" rel="stylesheet">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.2/jquery.ui.touch-punch.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<script type="text/javascript">
+// init function
+$(document).ready( function() {
+  $( "#up" ).hide();
+  $( "#down" ).hide();
+  $( "#right" ).hide();
+  $( "#left" ).hide();
+  $( "#spd_chg" ).hide();
+
+  $( "#buggy" ).draggable();
+});
+
+//var socketio = io.connect('http://localhost:1234');
+var socketio = io();
+
+function setDir (dir) {
+  socketio.emit("direction", {value: dir});
+  socketio.emit("speed", {value: $('input[name=spd]:checked').val()});
+
+  if ($( "#move_sync" ).val() == "OFF") {
+    $( "#move_sync" ).val("ON");
+  }
+}
+
+function setSpd (spd) {
+  //alert(spd);
+  socketio.emit("speed", {value: spd});
+}
+
+function setMov (button) {
+  if (button.value == "ON") {
+    setInitSync();
+    setSync();
+    button.value = "OFF";
+  } else {
+    setDir("stop");
+    button.value = "ON";
+  }
+}
+
+// sync motion data between client and server
+function syncMove() {
+  if ($( "#move_sync" ).val() == "OFF") {
+    var mv = [$( "#buggy" ).offset().left, $( "#buggy" ).offset().top];
+    socketio.emit("move", {value: mv});
+  }
+}
+
+function setSync() {
+  syncMove();
+  setTimeout("setSync()", 200);
+}
+
+// remember icon's init position
+function setInitSync() {
+  //var mv = [$( "#buggy" ).offset().left, $( "#buggy" ).offset().top];
+  var mv = [450,250];
+  socketio.emit("init_move", {value: mv});
+}
+
+// get rajicon's motion status
+socketio.on("status", function (data) {
+    $( "#horizon" ).text("HOR=" + data.value[0].toFixed(1));
+    //  $( "#vertical" ).text("VER=" + data.value[1].toFixed(1));
+    drawChart(data.value[1]);
+});
+
+// toggle ui layout
+function chgView() {
+  $( "#up" ).toggle();
+  $( "#down" ).toggle();
+  $( "#right" ).toggle();
+  $( "#left" ).toggle();
+  $( "#spd_chg" ).toggle();
+  $( "#spd_meter" ).toggle();
+  $( "#horizon" ).toggle();
+}
+
+google.charts.load('current', {'packages':['gauge']});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart(spd) {
+
+  var data = google.visualization.arrayToDataTable([
+    ['Label', 'Value'],
+    ['Speed', 0],
+  ]); 
+
+  var options = {
+    min: -100, max: 100,
+    redFrom: 50, redTo: 100,
+    yellowFrom:-100, yellowTo: -50,
+    minorTicks: 10
+  };
+
+  var chart = new google.visualization.Gauge(document.getElementById('spd_meter'));
+
+  data.setValue(0, 1, spd);
+  chart.draw(data, options);
+}
+
+</script>
+
+<body>
+<div id="main_ui" align="center" style="width:1024px;">
+  <!-- 	<img class="img" src="camera" alt="NOT CAPTURED">
+  <img src="/?action=stream" /> -->
+  <table border="0">
+      <tbody>
+          <tr>
+              <td align="center" width="100" height="50"></td>
+              <td align="center">
+                <input id="up" type="button" value="↑" onclick="setDir('up')" data-role="none" style="font-size: 1.8em; width:800px;　height:50px">
+              </td>
+              <td align="left" width="100" height="50">
+              </td>
+          </tr>
+          <tr>
+              <td align="center">
+                <input id="left" type="button" value="←" onclick="setDir('left')" data-role="none" style="font-size: 1.8em; width:100px; height:500px;">
+              </td>
+              <td align="center">
+                <img id="camera" src="http://192.168.11.5:8080/?action=stream" width="640" height="480" alt="NOT CAPTURED"/>
+              </td>
+              <td align="center">
+                <input id="right" type="button" value="→" onclick="setDir('right')" data-role="none" style="font-size: 1.8em; width:100px; height:500px;">
+              </td>
+          </tr>
+          <tr>
+              <td align="center" width="100" height="50">
+                UI
+                <input id="change_view" type="checkbox" value="change_view" onclick="chgView()" data-role="none" style="font-size: 1.8em; width:100px; height:50px;">
+              </td>
+              <td align="center" width="50" height="50">
+                <input id="down" type="button" value="↓" onclick="setDir('down')" data-role="none" style="font-size: 1.8em; width:800px; height:50px;">
+                <div id="spd_meter" style="width: 120px; height: 120px;"></div>
+                <div id="horizon">HOR=</div>
+              </td>
+              <td align="center" width="100" height="50">
+                <input id="stop" type="button" value="■" onclick="setDir('stop')" data-role="none" style="font-size: 1.8em; width:100px; height:50px;">
+              </td>
+          </tr>
+      </tbody>
+  </table> 
+
+	<div id="spd_chg">
+    Speed
+    <!-- Speed: 0~100% -->
+		<input type="radio" name="spd" value="10" onclick="setSpd(10)" data-role="none" style="width:50px; height:50px;" checked> 
+		<input type="radio" name="spd" value="20" onclick="setSpd(20)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="30" onclick="setSpd(30)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="40" onclick="setSpd(40)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="50" onclick="setSpd(50)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="60" onclick="setSpd(60)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="70" onclick="setSpd(70)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="80" onclick="setSpd(80)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="90" onclick="setSpd(90)" data-role="none" style="width:50px; height:50px;"> 
+		<input type="radio" name="spd" value="100" onclick="setSpd(100)" data-role="none" style="width:50px; height:50px;"> 
+	</div>
+
+	<!-- DRAGGABLE using jQuery -->
+	<div id="drag_ui" class="container">
+    <img class="img" src="cross_line.png" alt="+" style="position: absolute; left: 365px; top: 180px; width:320px; height:240px;">
+		<div id="buggy" class="ui-widget-content" style="position: absolute; left: 450px; top: 250px; width:150px; height:100px;">
+		  <img class="img" src="buggy.jpg" alt="BUGGY" style="width:150px; height:100px;">
+		  <input id="move_sync" name="move_sync" type="button" value="ON" onclick="setMov(this)" data-role="none" style="position: relative; top: -30px; width:150px; height:40px;">
+		</div>
+	</div>
+</div>
+</body>
+</html>

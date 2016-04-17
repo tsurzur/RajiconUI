@@ -1,0 +1,21 @@
+{
+  "name": "RajiconUI",
+  "version": "4.0.0",
+  "description": "Rajicon UI for Raspberry Pi",
+  "main": "rasp_server.js",
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "gulp": "^3.9.1",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node rasp_server.js [PORT]"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/home/git/RajiconUI/"
+  },
+  "author": "tsurzur",
+  "license": "MIT"
+}
