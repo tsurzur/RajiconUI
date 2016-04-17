@@ -120,7 +120,7 @@ function drawChart(spd) {
 
 <body>
 <div id="main_ui" align="center" style="width:1024px;">
-  <!-- 	<img class="img" src="camera" alt="NOT CAPTURED">
+  <!--     <img class="img" src="camera" alt="NOT CAPTURED">
   <img src="/?action=stream" /> -->
   <table border="0">
       <tbody>
@@ -137,7 +137,7 @@ function drawChart(spd) {
                 <input id="left" type="button" value="←" onclick="setDir('left')" data-role="none" style="font-size: 1.8em; width:100px; height:500px;">
               </td>
               <td align="center">
-                <img id="camera" src="http://192.168.11.5:8080/?action=stream" width="640" height="480" alt="NOT CAPTURED"/>
+                <img id="camera" src="http://25.78.201.10:8080/?action=stream" width="640" height="480" alt="NOT CAPTURED"/>
               </td>
               <td align="center">
                 <input id="right" type="button" value="→" onclick="setDir('right')" data-role="none" style="font-size: 1.8em; width:100px; height:500px;">
@@ -160,29 +160,29 @@ function drawChart(spd) {
       </tbody>
   </table> 
 
-	<div id="spd_chg">
+    <div id="spd_chg">
     Speed
     <!-- Speed: 0~100% -->
-		<input type="radio" name="spd" value="10" onclick="setSpd(10)" data-role="none" style="width:50px; height:50px;" checked> 
-		<input type="radio" name="spd" value="20" onclick="setSpd(20)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="30" onclick="setSpd(30)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="40" onclick="setSpd(40)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="50" onclick="setSpd(50)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="60" onclick="setSpd(60)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="70" onclick="setSpd(70)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="80" onclick="setSpd(80)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="90" onclick="setSpd(90)" data-role="none" style="width:50px; height:50px;"> 
-		<input type="radio" name="spd" value="100" onclick="setSpd(100)" data-role="none" style="width:50px; height:50px;"> 
-	</div>
+        <input type="radio" name="spd" value="10" onclick="setSpd(10)" data-role="none" style="width:50px; height:50px;" checked> 
+        <input type="radio" name="spd" value="20" onclick="setSpd(20)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="30" onclick="setSpd(30)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="40" onclick="setSpd(40)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="50" onclick="setSpd(50)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="60" onclick="setSpd(60)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="70" onclick="setSpd(70)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="80" onclick="setSpd(80)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="90" onclick="setSpd(90)" data-role="none" style="width:50px; height:50px;"> 
+        <input type="radio" name="spd" value="100" onclick="setSpd(100)" data-role="none" style="width:50px; height:50px;"> 
+    </div>
 
-	<!-- DRAGGABLE using jQuery -->
-	<div id="drag_ui" class="container">
+    <!-- DRAGGABLE using jQuery -->
+    <div id="drag_ui" class="container">
     <img class="img" src="cross_line.png" alt="+" style="position: absolute; left: 365px; top: 180px; width:320px; height:240px;">
-		<div id="buggy" class="ui-widget-content" style="position: absolute; left: 450px; top: 250px; width:150px; height:100px;">
-		  <img class="img" src="buggy.jpg" alt="BUGGY" style="width:150px; height:100px;">
-		  <input id="move_sync" name="move_sync" type="button" value="ON" onclick="setMov(this)" data-role="none" style="position: relative; top: -30px; width:150px; height:40px;">
-		</div>
-	</div>
+        <div id="buggy" class="ui-widget-content" style="position: absolute; left: 450px; top: 250px; width:150px; height:100px;">
+          <img class="img" src="buggy.jpg" alt="BUGGY" style="width:150px; height:100px;">
+          <input id="move_sync" name="move_sync" type="button" value="ON" onclick="setMov(this)" data-role="none" style="position: relative; top: -30px; width:150px; height:40px;">
+        </div>
+    </div>
 </div>
 </body>
 </html>

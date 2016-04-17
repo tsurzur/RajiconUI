@@ -85,7 +85,7 @@ function response(req, res) {
           var imgData = fs.readFileSync( image_file, "binary" );
           res.writeHead(200, {"Content-Type": type } );
           res.write( imgData, "binary" );
-	  res.end();
+          res.end();
         }
 
         // console.log("req.url = " + req.url);
@@ -115,7 +115,7 @@ function response(req, res) {
           var imgData = fs.readFileSync( image_file, "binary" );
           res.writeHead(200, {"Content-Type": type } );
           res.write( imgData, "binary" );
-	  res.end();
+          res.end();
         }
         break;
   case "/camera":

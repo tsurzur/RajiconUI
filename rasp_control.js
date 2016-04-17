@@ -82,11 +82,11 @@ module.exports = {
     // ver
     var spd;
     if(val[1] > 0 ) {
-    	spd = val[1];
-    	this.raspSetDir("up");
+      spd = val[1];
+      this.raspSetDir("up");
     } else {
-    	spd = -val[1];
-    	this.raspSetDir("down");
+      spd = -val[1];
+      this.raspSetDir("down");
     }
     this.raspSetSpd(spd);
   },
