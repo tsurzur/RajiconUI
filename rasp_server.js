@@ -8,7 +8,6 @@ if (process.argv.length < 3) {
 var ctrl = require("./rasp_control.js");
 
 // Get IP address
-var gulp   = require( "gulp" );
 var os     = require("os");
 var ifaces = os.networkInterfaces();
 var ipAddress;
@@ -85,7 +84,8 @@ function response(req, res) {
         if( fs.existsSync( image_file ) ){
           var imgData = fs.readFileSync( image_file, "binary" );
           res.writeHead(200, {"Content-Type": type } );
-          res.end( imgData, "binary" );
+          res.write( imgData, "binary" );
+	  res.end();
         }
 
         // console.log("req.url = " + req.url);
@@ -114,7 +114,8 @@ function response(req, res) {
         if( fs.existsSync( image_file ) ){
           var imgData = fs.readFileSync( image_file, "binary" );
           res.writeHead(200, {"Content-Type": type } );
-          res.end( imgData, "binary" );
+          res.write( imgData, "binary" );
+	  res.end();
         }
         break;
   case "/camera":
@@ -125,12 +126,12 @@ function response(req, res) {
         // res.writeHead(200, {"Content-Type": type } );
         // res.end( imgData, "binary" );
         break;
+  default:
+    if (req.method !=  "POST") {
+      makeHTML();
+    }
+    break;
   }
-
-  if (req.method !=  "POST") {
-    makeHTML();
-  }
-
   //console.log("req.url = " + req.url );
   //console.log("req.method = " + req.method );
 }
